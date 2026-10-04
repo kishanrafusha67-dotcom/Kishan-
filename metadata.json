@@ -1,0 +1,6 @@
+{
+  "name": "Labour Bill",
+  "description": "APMC Labour billing, daily worker hazari attendance tracker, and pocket ledger app",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
