@@ -1,0 +1,48 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Make Gradle Wrapper Executable
+        # અહીં આપણે પહેલા ફોલ્ડરની અંદર જઈને પરમિશન આપીશું
+        run: cd "Labour Bill" && chmod +x ./gradlew
+
+      - name: Build APK
+        # અહીં પણ પ્રોજેક્ટ ફોલ્ડરની અંદર જઈને જ બિલ્ડ રન થશે
+        run: cd "Labour Bill" && ./gradlew assembleDebug
+
+      - name: Check APK
+        run: |
+          echo "APK files:"
+          find . -type f -name "*.apk" -print
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: APMC-Junagadh-APK
+          # સાચો પાથ સેટ કર્યો છે જે પ્રોજેક્ટની અંદરથી APK શોધશે
+          path: "Labour Bill/app/build/outputs/apk/debug/*.apk"
+          if-no-files-found: error
+          
